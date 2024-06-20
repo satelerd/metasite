@@ -101,17 +101,6 @@
                 transparent 2px
             );
         }
-        .flash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: white;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.1s;
-        }
     </style>
 </head>
 <body>
@@ -122,7 +111,6 @@
     </div>
     <div id="footer">este texto es tan pequeño que probablemente nadie lo lea... quizas solo tu.</div>
     <div class="glitch-overlay"></div>
-    <div class="flash"></div>
 
     <script>
         let clicks = 0;
@@ -133,7 +121,6 @@
         const body = document.body;
         const container = document.getElementById('container');
         const glitchOverlay = document.querySelector('.glitch-overlay');
-        const flash = document.querySelector('.flash');
 
         function deconstruir(elemento, texto, callback) {
             elemento.classList.add('typing');
@@ -174,32 +161,11 @@
 
         function glitchearPagina() {
             glitchOverlay.style.opacity = '1';
-            let flashes = 0;
-            const flashInterval = setInterval(() => {
-                if (flashes < 5) {
-                    flash.style.opacity = '1';
-                    setTimeout(() => { flash.style.opacity = '0'; }, 100);
-                    flashes++;
-                } else {
-                    clearInterval(flashInterval);
-                    fadeToBlack();
-                }
-            }, 500);
-        }
-
-        function fadeToBlack() {
-            let opacity = 1;
-            const fadeInterval = setInterval(() => {
-                if (opacity > 0) {
-                    opacity -= 0.1;
-                    container.style.opacity = opacity;
-                    footer.style.opacity = opacity;
-                    body.style.backgroundColor = `rgba(0, 0, 0, ${1 - opacity})`;
-                } else {
-                    clearInterval(fadeInterval);
-                    body.style.backgroundColor = '#000';
-                }
-            }, 200);
+            setTimeout(() => {
+                body.style.background = '#000';
+                container.style.opacity = '0';
+                footer.style.opacity = '0';
+            }, 2000);
         }
 
         button.addEventListener('click', () => {
@@ -212,7 +178,7 @@
                     deconstruir(button, "Te dije que NO hagas CLICK!!!");
                     break;
                 case 2:
-                    deconstruir(content, "la entropia tiene un comportamiento exponencial, una serie de sigmoids exponencialmente mas grandes, lentamente acercandose a la singularidad.");
+                    deconstruir(content, "la entropia tiene un comportamiento exponencial, una serie de sigmoids, lentamente acercandose a la singularidad.");
                     break;
                 case 3:
                     deconstruir(footer, "todo cambia. secretos quedan atrás.");
@@ -226,7 +192,11 @@
                     break;
                 case 6:
                     explotar();
-                    setTimeout(glitchearPagina, 2000);
+                    setInterval(() => {
+                        const hue = Math.random() * 360;
+                        body.style.background = `linear-gradient(${Math.random() * 360}deg, hsl(${hue}, 15%, 10%), hsl(${(hue + 30) % 360}, 15%, 20%))`;
+                    }, 100);
+                    setTimeout(glitchearPagina, 3000);
                     break;
             }
         });
