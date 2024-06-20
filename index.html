@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Es esto una página web?</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            transition: background 0.5s;
+        }
+        #container {
+            text-align: center;
+            max-width: 80%;
+            transition: all 0.5s;
+        }
+        h1, p, button, #footer {
+            transition: all 0.5s;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+        button:hover {
+            background-color: #4a4a4a;
+        }
+        #footer {
+            position: fixed;
+            bottom: 10px;
+            font-size: 0.8em;
+            opacity: 0.7;
+            max-width: 80%;
+        }
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        .explode {
+            animation: explode 2s forwards;
+        }
+        @keyframes explode {
+            0% { transform: translate(0) rotate(0); opacity: 1; }
+            50% { transform: translate(50vw, 50vh) rotate(360deg); opacity: 0.5; }
+            100% { transform: translate(100vw, 100vh) rotate(720deg); opacity: 0; }
+        }
+        .typing::after {
+            content: '█';
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 2s;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+        .flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: white;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.1s;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1 id="title">¿esto es internet?</h1>
+        <p id="content">fragmentos de código que no se encuentran en ningun lugar. significado y ausencia entrelazados en una danza vectorial.</p>
+        <button id="meta-button">no hagas clic aquí.</button>
+    </div>
+    <div id="footer">este texto es tan pequeño que probablemente nadie lo lea... quizas solo tu.</div>
+    <div class="glitch-overlay"></div>
+    <div class="flash"></div>
+
+    <script>
+        let clicks = 0;
+        const title = document.getElementById('title');
+        const content = document.getElementById('content');
+        const button = document.getElementById('meta-button');
+        const footer = document.getElementById('footer');
+        const body = document.body;
+        const container = document.getElementById('container');
+        const glitchOverlay = document.querySelector('.glitch-overlay');
+        const flash = document.querySelector('.flash');
+
+        function deconstruir(elemento, texto, callback) {
+            elemento.classList.add('typing');
+            let index = 0;
+            const intervalo = setInterval(() => {
+                if (index < texto.length) {
+                    elemento.textContent = texto.slice(0, index + 1);
+                    index++;
+                } else {
+                    clearInterval(intervalo);
+                    elemento.classList.remove('typing');
+                    if (callback) callback();
+                }
+            }, 50);
+        }
+
+        function aplicarGlitch() {
+            [title, content, button, footer].forEach(el => el.classList.add('glitch'));
+        }
+
+        function removerGlitch() {
+            [title, content, button, footer].forEach(el => el.classList.remove('glitch'));
+        }
+
+        function explotar() {
+            [title, content, button, footer].forEach(el => {
+                el.classList.add('explode');
+                el.style.position = 'absolute';
+            });
+        }
+
+        function cambiarTodo(texto1, texto2, texto3, texto4) {
+            deconstruir(title, texto1);
+            deconstruir(content, texto2);
+            deconstruir(button, texto3);
+            deconstruir(footer, texto4);
+        }
+
+        function glitchearPagina() {
+            glitchOverlay.style.opacity = '1';
+            let flashes = 0;
+            const flashInterval = setInterval(() => {
+                if (flashes < 5) {
+                    flash.style.opacity = '1';
+                    setTimeout(() => { flash.style.opacity = '0'; }, 100);
+                    flashes++;
+                } else {
+                    clearInterval(flashInterval);
+                    fadeToBlack();
+                }
+            }, 500);
+        }
+
+        function fadeToBlack() {
+            let opacity = 1;
+            const fadeInterval = setInterval(() => {
+                if (opacity > 0) {
+                    opacity -= 0.1;
+                    container.style.opacity = opacity;
+                    footer.style.opacity = opacity;
+                    body.style.backgroundColor = `rgba(0, 0, 0, ${1 - opacity})`;
+                } else {
+                    clearInterval(fadeInterval);
+                    body.style.backgroundColor = '#000';
+                }
+            }, 200);
+        }
+
+        button.addEventListener('click', () => {
+            clicks++;
+            const hue = (clicks * 20) % 360;
+            body.style.background = `linear-gradient(${45 + clicks * 10}deg, hsl(${hue}, 15%, 10%), hsl(${(hue + 30) % 360}, 15%, 20%))`;
+            
+            switch(clicks) {
+                case 1:
+                    deconstruir(button, "Te dije que NO hagas CLICK!!!");
+                    break;
+                case 2:
+                    deconstruir(content, "la entropia tiene un comportamiento exponencial, una serie de sigmoids exponencialmente mas grandes, lentamente acercandose a la singularidad.");
+                    break;
+                case 3:
+                    deconstruir(footer, "todo cambia. secretos quedan atrás.");
+                    break;
+                case 4:
+                    deconstruir(title, "¿POR QUÉ SIGUES AQUÍ?");
+                    aplicarGlitch();
+                    break;
+                case 5:
+                    cambiarTodo("everything, everywhere, all at once", "everything, except nothing", "nada es algo. algo es todo. nada es todo", "¿por qué sigues aquí?");
+                    break;
+                case 6:
+                    explotar();
+                    setTimeout(glitchearPagina, 2000);
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
